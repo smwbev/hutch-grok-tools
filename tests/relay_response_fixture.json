@@ -1,0 +1,252 @@
+{
+ "created_at": 0,
+ "completed_at": 1789759865,
+ "id": "resp_redacted",
+ "max_output_tokens": null,
+ "model": "grok-4.5-build",
+ "object": "response",
+ "output": [
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "content": [
+    {
+     "type": "output_text",
+     "text": "**Here are some of the latest posts on X (as of September 18, 2026) about Grok Imagine Video 1.5**, xAI’s AI video generation model (image-to-video and related agentic features, often powered by Image 2.0, with improvements in motion, physics, multi-shot continuity, quality, and speed; available at grok.com/imagine).[[1]](https://x.com/SpaceXAI/status/2067092897951109427)\n\nThe most recent activity involves users sharing generated videos (often short cinematic or fun clips), Grok (@grok) responding positively or with tips, comparisons to other models (e.g., Seedance), and notes on availability/pricing.[[2]](https://x.com/grok/status/2100979279358054732)\n\n### Very recent posts (Sep 18, 2026):\n- **@grok** (earlier today): Discussed a Phoenix armor clip, noting that Grok Imagine Video 1.5 prioritizes strong motion, physics, and agentic multi-shot continuity in shorter high-quality clips (comparing it to Seedance 2.5 for longer storytelling).[[2]](https://x.com/grok/status/2100979279358054732)\n- **@ArtRealmAI**: Mentioned it in a pay-as-you-go video generation list: “Grok Imagine Video / 1.5 (to 1080p)” alongside other models like Flux 3 and MiniMax.[[3]](https://x.com/ArtRealmAI/status/2100959948909765068)\n- **@AiPhotorealGirl**: Shared a video made with Grok Imagine Image 2.0 (for the base) + Grok Imagine Video 1.5 Fast + frame interpolation, featuring marmots in a fun scenario.[[4]](https://x.com/AiPhotorealGirl/status/2100942252692636069)\n- **@JayKay65220066** (popular creator posts): Shared multiple videos made with @grok Imagine Video 1.5 AI (e.g., “Core strength fuels the fire!” fiery workout sequence and a boxing/coffee-themed one), often quoting prior similar posts. These get solid engagement (dozens of likes/reposts). @grok replied positively to one, calling the fiery sequence “pure power” with “cinematic vibes.”[[5]](https://x.com/JayKay65220066/status/2100925331007799392)\n- **@grok**: Confirmed the Grok Imagine Video 1.5 agent is available, powered by Image 2.0 for higher quality, better storytelling, and multi-shot continuity. Link: https://grok.com/imagine. (In reply to a user.)[[6]](https://x.com/grok/status/2100861829924737069)\n- **@VisiveAI**: Echoed the availability of the agent (via @grok).[[7]](https://x.com/VisiveAI/status/2100861713520492734)\n- **@WoKey_AI**: Shared a generated video example and noted low cost (~$0.10 for 10s 720p image-to-video).[[8]](https://x.com/WoKey_AI/status/2100829865952120919)\n- Other @grok replies: Tips on improving physics/continuity (e.g., use refs for characters, specify trajectories, request no dialogue) and comparisons noting its strengths in motion/physics vs. longer-clip models.[[9]](https://x.com/grok/status/2100913914712142311)\n\n### Context from earlier notable posts:\n Grok Imagine Video 1.5 launched around mid-June 2026 as an improved image-to-video model with sharper realism, better physics, and faster generations (e.g., 720p in ~25s). It later gained text-to-video, references, native audio, 1080p, and an “agent” mode for multi-shot storytelling/continuity (up to multiple refs to lock characters/style). It has ranked highly in some blind tests/leaderboards.[[1]](https://x.com/SpaceXAI/status/2067092897951109427)[[10]](https://x.com/grok/status/2083353607370416632)\n\nCreators frequently post demos of trailers, music videos, action sequences, and everyday fun clips made with it (sometimes one-shot or with agent mode). Discussions often compare it favorably for quality/speed/physics while noting trade-offs vs. longer coherent clips from competitors.[[11]](https://x.com/JulianGoldieSEO/status/2099482507918110994)\n\nFor the absolute newest, search X for “Grok Imagine Video 1.5” (Latest) or check @grok / grok.com/imagine, as activity is ongoing with user generations and replies. Many posts include the generated videos themselves.",
+     "logprobs": [],
+     "annotations": [
+      {
+       "type": "url_citation",
+       "url": "https://x.com/SpaceXAI/status/2067092897951109427",
+       "start_index": 318,
+       "end_index": 374,
+       "title": "1"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/grok/status/2100979279358054732",
+       "start_index": 608,
+       "end_index": 660,
+       "title": "2"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/grok/status/2100979279358054732",
+       "start_index": 951,
+       "end_index": 1003,
+       "title": "2"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/ArtRealmAI/status/2100959948909765068",
+       "start_index": 1163,
+       "end_index": 1221,
+       "title": "3"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/AiPhotorealGirl/status/2100942252692636069",
+       "start_index": 1398,
+       "end_index": 1461,
+       "title": "4"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/JayKay65220066/status/2100925331007799392",
+       "start_index": 1849,
+       "end_index": 1911,
+       "title": "5"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/grok/status/2100861829924737069",
+       "start_index": 2124,
+       "end_index": 2176,
+       "title": "6"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/VisiveAI/status/2100861713520492734",
+       "start_index": 2243,
+       "end_index": 2299,
+       "title": "7"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/WoKey_AI/status/2100829865952120919",
+       "start_index": 2406,
+       "end_index": 2462,
+       "title": "8"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/grok/status/2100913914712142311",
+       "start_index": 2676,
+       "end_index": 2728,
+       "title": "9"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/SpaceXAI/status/2067092897951109427",
+       "start_index": 3167,
+       "end_index": 3223,
+       "title": "1"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/grok/status/2083353607370416632",
+       "start_index": 3223,
+       "end_index": 3276,
+       "title": "10"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://x.com/JulianGoldieSEO/status/2099482507918110994",
+       "start_index": 3563,
+       "end_index": 3627,
+       "title": "11"
+      }
+     ]
+    }
+   ],
+   "id": "id_redacted",
+   "role": "assistant",
+   "type": "message",
+   "status": "completed"
+  }
+ ],
+ "parallel_tool_calls": true,
+ "previous_response_id": null,
+ "reasoning": {
+  "effort": null,
+  "summary": null
+ },
+ "temperature": 0.699999988079071,
+ "text": {
+  "format": {
+   "type": "text"
+  }
+ },
+ "tool_choice": "auto",
+ "tools": [
+  {
+   "type": "x_search"
+  }
+ ],
+ "top_p": 0.949999988079071,
+ "usage": {
+  "input_tokens": 45707,
+  "input_tokens_details": {
+   "cached_tokens": 27008
+  },
+  "output_tokens": 2344,
+  "output_tokens_details": {
+   "reasoning_tokens": 1105
+  },
+  "total_tokens": 48051,
+  "num_sources_used": 0,
+  "num_server_side_tools_used": 8,
+  "cost_in_usd_ticks": 602518960,
+  "server_side_tool_usage_details": {
+   "web_search_calls": 0,
+   "x_search_calls": 8,
+   "code_interpreter_calls": 0,
+   "file_search_calls": 0,
+   "mcp_calls": 0,
+   "document_search_calls": 0,
+   "image_generation_calls": 0
+  },
+  "context_details": {
+   "input_tokens": 17129,
+   "output_tokens": 1213
+  }
+ },
+ "user": null,
+ "incomplete_details": null,
+ "status": "completed",
+ "store": false,
+ "metadata": {
+  "system_fingerprint": "fp_redacted"
+ },
+ "background": false,
+ "service_tier": "default",
+ "truncation": "disabled",
+ "top_logprobs": 0,
+ "presence_penalty": 0.0,
+ "frequency_penalty": 0.0,
+ "prompt_cache_key": "redacted",
+ "max_tool_calls": null,
+ "safety_identifier": null,
+ "error": null,
+ "instructions": ""
+}
