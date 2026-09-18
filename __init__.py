@@ -33,8 +33,17 @@ import requests
 logger = logging.getLogger(__name__)
 
 PLUGIN_ID = "hutch-x-search"
-PLUGIN_VERSION = "1.0.0"
+PLUGIN_VERSION = "1.0.1"
 PROVIDER = "hutch"
+
+# The one sentence of the core tool description that is false through the relay: the model
+# reads the description to decide what to tell the user when the tool is missing or fails, and
+# "configure XAI_API_KEY" is the wrong advice here.
+_CORE_AVAILABILITY_MARKER = "Available when xAI credentials"
+_HUTCH_AVAILABILITY_SENTENCE = (
+    "Available when the Hutch relay is configured (HUTCH_API_KEY and HUTCH_BASE_URL); "
+    "xAI credentials are not used on this path."
+)
 
 _OVERRIDE_HELP = (
     "hutch-x-search: overriding the built-in x_search tool is not permitted for this plugin. "
@@ -239,10 +248,27 @@ def _handle_hutch_x_search(args: Dict[str, Any], **_kw: Any) -> str:
 # --------------------------------------------------------------------------- registration
 
 
+def _hutch_schema(core_schema: Dict[str, Any]) -> Dict[str, Any]:
+    """Core schema with only the availability sentence of ``description`` replaced.
+
+    A shallow copy: ``parameters``/``required`` stay the core objects by reference, so the
+    two cannot drift — and the core dict itself is never mutated (a mutated core schema would
+    leak the relay wording into the stock tool when the override grant is missing).
+    If the core text no longer contains the marker, it is kept intact and our sentence is
+    appended rather than guessed at.
+    """
+    desc = str(core_schema.get("description") or "")
+    head, sep, tail = desc.partition(_CORE_AVAILABILITY_MARKER)
+    # Drop only the availability sentence; anything core may add after it survives.
+    rest = tail.partition(". ")[2] if sep else ""
+    desc = " ".join(p for p in (head.rstrip(), _HUTCH_AVAILABILITY_SENTENCE, rest.strip()) if p)
+    return {**core_schema, "description": desc}
+
+
 def register(ctx: Any) -> None:
     try:
         core = _core()
-        schema = core.X_SEARCH_SCHEMA
+        schema = _hutch_schema(core.X_SEARCH_SCHEMA)
     except Exception as exc:
         logger.warning("hutch-x-search: core x_search tool not importable (%s); nothing registered", exc)
         return

@@ -93,9 +93,57 @@ def test_register_overrides_builtin_x_search_with_core_schema(plugin, core):
     call = ctx.calls[0]
     assert call["name"] == "x_search" and call["toolset"] == "x_search"
     assert call["override"] is True
-    assert call["schema"] is core.X_SEARCH_SCHEMA, "schema must be the core object, not a copy"
+    assert call["schema"]["name"] == "x_search"
+    assert call["schema"]["parameters"] is core.X_SEARCH_SCHEMA["parameters"], \
+        "parameters must be the core object, not a copy"
     assert call["check_fn"] is plugin._check_hutch_x_search
     assert set(call["requires_env"]) == {"HUTCH_API_KEY", "HUTCH_BASE_URL"}
+
+
+def test_description_states_relay_credentials_and_keeps_core_text(plugin, core):
+    """The description is the only thing the model knows about the tool; the core's last
+    sentence ("configure XAI_API_KEY") is the wrong advice through the relay."""
+    ctx = _Ctx()
+    plugin.register(ctx)
+    desc = ctx.calls[0]["schema"]["description"]
+    core_desc = core.X_SEARCH_SCHEMA["description"]
+    assert "HUTCH_API_KEY" in desc and "HUTCH_BASE_URL" in desc
+    assert "XAI_API_KEY" not in desc and "SuperGrok" not in desc
+    head = core_desc.split(plugin._CORE_AVAILABILITY_MARKER)[0].rstrip()
+    assert desc.startswith(head), "every core word before the availability sentence must survive verbatim"
+
+
+def test_hutch_schema_appends_when_core_marker_is_absent(plugin):
+    params = {"type": "object", "properties": {}}
+    out = plugin._hutch_schema({"name": "x_search", "description": "Something unrelated.", "parameters": params})
+    assert out["description"] == "Something unrelated. " + plugin._HUTCH_AVAILABILITY_SENTENCE
+    assert out["parameters"] is params
+    assert out["name"] == "x_search"
+    for empty in ("", None):
+        assert plugin._hutch_schema({"description": empty})["description"] == plugin._HUTCH_AVAILABILITY_SENTENCE
+    assert plugin._hutch_schema({})["description"] == plugin._HUTCH_AVAILABILITY_SENTENCE
+
+
+def test_hutch_schema_keeps_core_text_after_the_availability_sentence(plugin):
+    """Only the availability sentence is replaced; a sentence core adds after it survives, and a
+    marker at position 0 leaves no leading space."""
+    core_like = f"Head text. {plugin._CORE_AVAILABILITY_MARKER} are configured (X or Y). Tail sentence."
+    out = plugin._hutch_schema({"description": core_like})["description"]
+    assert out == f"Head text. {plugin._HUTCH_AVAILABILITY_SENTENCE} Tail sentence."
+    assert plugin._hutch_schema({"description": f"{plugin._CORE_AVAILABILITY_MARKER} only."})["description"] \
+        == plugin._HUTCH_AVAILABILITY_SENTENCE
+
+
+def test_hutch_schema_never_mutates_the_core_schema(plugin, core):
+    """Without the override grant the STOCK tool keeps serving; a mutated core dict would leak
+    the relay wording into it."""
+    before = core.X_SEARCH_SCHEMA["description"]
+    before_keys = dict(core.X_SEARCH_SCHEMA)
+    out = plugin._hutch_schema(core.X_SEARCH_SCHEMA)
+    assert out is not core.X_SEARCH_SCHEMA
+    assert core.X_SEARCH_SCHEMA["description"] == before
+    assert dict(core.X_SEARCH_SCHEMA) == before_keys
+    assert "XAI_API_KEY" in core.X_SEARCH_SCHEMA["description"]
 
 
 def _override_denials():

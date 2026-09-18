@@ -1,7 +1,7 @@
 name: hutch-x-search
 kind: standalone
-version: 1.0.0
-description: "Routes the built-in Hermes x_search tool through the Hutch relay (/responses + xAI x_search server tool) — same tool name, schema and result shape; only the transport and the credential change."
+version: 1.0.1
+description: "Routes the built-in Hermes x_search tool through the Hutch relay (/responses + xAI x_search server tool) — same tool name, parameters and result shape; only the transport, the credential and the availability sentence of the description change."
 author: Evgenii (smwbev)
 homepage: https://github.com/smwbev/hutch-x-search
 requires_hermes: ">=0.21.3"

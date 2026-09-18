@@ -3,7 +3,7 @@
 The built-in Hermes **`x_search`** tool (X / Twitter search via xAI's server-side `x_search`),
 transported through the **Hutch relay** instead of a direct xAI account.
 
-Same tool name, same schema, same result shape, same `config.yaml → x_search.*` settings. The
+Same tool name, same parameters, same result shape, same `config.yaml → x_search.*` settings. The
 only things that change are the endpoint (`{HUTCH_BASE_URL}/responses`) and the credential
 (`HUTCH_API_KEY`). For the model — and for you — nothing changes except that it works.
 
@@ -84,6 +84,10 @@ Identical to the built-in, plus two diagnostic fields:
 }
 ```
 
+- **The tool description the model sees** is the core text with the last sentence replaced:
+  availability is stated in terms of `HUTCH_API_KEY` / `HUTCH_BASE_URL`, not xAI credentials
+  — so a failing call never ends in "configure XAI_API_KEY" advice. Parameters are the core
+  object, untouched.
 - `relay_model` — the concrete upstream build that answered (useful when the relay maps
   `grok-4.5` → `grok-4.5-build`).
 - `usage` — the upstream usage block; `server_side_tool_usage_details.x_search_calls` tells you
@@ -115,9 +119,10 @@ The relay's `/models` catalog is not consulted (it is unstable); pick a model th
 - **Tool availability** follows `HUTCH_API_KEY` + `HUTCH_BASE_URL` (both required) — not
   xAI credentials. With this plugin granted and enabled, local `xai-oauth` / `XAI_API_KEY` are
   no longer used for `x_search` at all.
-- **UI text lag.** `hermes tools` still labels the toolset “requires xAI OAuth or XAI_API_KEY”
-  and lists two xAI backends — that copy lives in core (`hermes_cli/tools_config.py`), the
-  plugin cannot change it. Ignore it; the tool works with the relay variables alone.
+- **UI text lag — `hermes tools` only.** The Tools screen still labels the toolset “requires
+  xAI OAuth or XAI_API_KEY” and lists two xAI backends — that copy lives in core
+  (`hermes_cli/tools_config.py`), the plugin cannot change it. Ignore it; the tool works with
+  the relay variables alone. The tool description the *model* sees is already correct (above).
 - **`User-Agent`** is `hutch-x-search/<version>`, not Hermes' xAI-OAuth client string, so relay
   logs are honest about who is calling.
 - Nothing is read from env or config at import time (plugin discovery runs before `.env` is
@@ -141,11 +146,11 @@ The relay's `/models` catalog is not consulted (it is unstable); pick a model th
 PYTHONPATH=/path/to/hermes-agent python -m pytest tests/ -q
 ```
 
-22 tests, no network: registration contract (name/toolset/override/core schema identity),
+26 tests, no network: registration contract (name/toolset/override/core parameters identity),
 graceful degradation when the grant is missing or the core module is absent, `check_fn`
 semantics, request shape (URL, bearer, payload, filters, `store: false`, model/config
 precedence, reasoning effort), parsing of a **real relay response** captured 2026-09-19
-(ids and encrypted reasoning scrubbed), degraded detection, non-object bodies, upstream error
+(ids and encrypted reasoning scrubbed), description rewrite (relay wording, core parameters by identity, fallback when core text changes, no mutation of the core schema), degraded detection, non-object bodies, upstream error
 pass-through, timeout wording, input validation before any HTTP, no import-time env reads.
 
 ## The proper fix lives upstream
@@ -154,6 +159,13 @@ This plugin is a bridge. The right solution is an `x_search.provider: <provider_
 in Hermes core so the tool takes `base_url`/key from the provider registry (like
 `image_gen.provider`), keeping origin-pinning for the OAuth bearer only. When that lands,
 uninstall this plugin; nothing else needs to change.
+
+## Changelog
+
+- **1.0.1** — the tool description the model sees now states availability in terms of
+  `HUTCH_API_KEY` / `HUTCH_BASE_URL` instead of xAI credentials (core parameters untouched,
+  core schema never mutated). No behaviour change.
+- **1.0.0** — first release.
 
 ## License
 
