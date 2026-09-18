@@ -1,4 +1,4 @@
-"""hutch-x-search — behaviour contracts of the x_search override. No network.
+"""hutch-grok-tools — behaviour contracts of the x_search override. No network.
 
 Run from the plugin root with the Hermes tree importable::
 
@@ -21,13 +21,23 @@ PLUGIN_DIR = Path(__file__).resolve().parents[1]
 FIXTURE = PLUGIN_DIR / "tests" / "relay_response_fixture.json"
 
 
+def _load_plugin(module_name: str):
+    """Import the plugin the way Hermes does — as a PACKAGE rooted at the plugin dir (so the
+    relative ``from .web_provider import …`` resolves) — under a throwaway name."""
+    for k in [k for k in sys.modules if k == module_name or k.startswith(module_name + ".")]:
+        del sys.modules[k]
+    spec = importlib.util.spec_from_file_location(
+        module_name, PLUGIN_DIR / "__init__.py", submodule_search_locations=[str(PLUGIN_DIR)])
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
 @pytest.fixture
 def plugin(monkeypatch):
-    """Fresh import of the plugin module — a flat ``__init__.py`` plugin, loaded by path like
-    Hermes does, so nothing leaks between tests through module state."""
-    spec = importlib.util.spec_from_file_location("hutch_x_search_under_test", PLUGIN_DIR / "__init__.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    """Fresh import of the plugin so nothing leaks between tests through module state."""
+    mod = _load_plugin("hutch_grok_tools_under_test")
     monkeypatch.setenv("HUTCH_API_KEY", "hutch-test-key")
     monkeypatch.setenv("HUTCH_BASE_URL", "https://relay.test.example/v1")
     return mod
@@ -42,12 +52,16 @@ def core():
 class _Ctx:
     def __init__(self, raise_on_register: BaseException | None = None):
         self.calls: list[dict] = []
+        self.web_providers: list = []
         self._raise = raise_on_register
 
     def register_tool(self, **kwargs):
         self.calls.append(kwargs)
         if self._raise is not None:
             raise self._raise
+
+    def register_web_search_provider(self, provider):
+        self.web_providers.append(provider)
 
 
 def _response(status: int, body, *, json_body: bool = True) -> SimpleNamespace:
@@ -98,6 +112,7 @@ def test_register_overrides_builtin_x_search_with_core_schema(plugin, core):
         "parameters must be the core object, not a copy"
     assert call["check_fn"] is plugin._check_hutch_x_search
     assert set(call["requires_env"]) == {"HUTCH_API_KEY", "HUTCH_BASE_URL"}
+    assert len(ctx.web_providers) == 1
 
 
 def test_description_states_relay_credentials_and_keeps_core_text(plugin, core):
@@ -167,8 +182,9 @@ def test_register_survives_denied_override_with_actionable_warning(plugin, exc, 
         plugin.register(ctx)  # must not raise
     assert len(ctx.calls) == 1
     msgs = [r.getMessage() for r in caplog.records if r.levelno == logging.WARNING]
-    assert msgs and "allow_tool_override: true" in msgs[-1] and plugin.PLUGIN_ID in msgs[-1]
-    assert "denied by" in msgs[-1]
+    denial = [m for m in msgs if "allow_tool_override: true" in m]
+    assert denial and plugin.PLUGIN_ID in denial[-1] and "denied by" in denial[-1]
+    assert len(ctx.web_providers) == 1, "a denied x_search override must not cost the user web_search"
 
 
 def test_register_skips_cleanly_when_core_tool_missing(plugin, monkeypatch, caplog):
@@ -181,6 +197,7 @@ def test_register_skips_cleanly_when_core_tool_missing(plugin, monkeypatch, capl
         plugin.register(ctx)
     assert ctx.calls == []
     assert any("not importable" in r.getMessage() for r in caplog.records)
+    assert len(ctx.web_providers) == 1, "web_search does not depend on the core x_search module"
 
 
 # ---------------------------------------------------------------- check_fn
@@ -210,7 +227,7 @@ def test_request_goes_to_relay_with_hutch_bearer_and_core_payload(plugin, monkey
     assert out["success"] is True
     assert seen["url"] == "https://relay.test.example/v1/responses"
     assert seen["headers"]["Authorization"] == "Bearer hutch-test-key"
-    assert seen["headers"]["User-Agent"].startswith("hutch-x-search/")
+    assert seen["headers"]["User-Agent"].startswith("hutch-grok-tools/")
     assert "xai" not in seen["headers"]["User-Agent"].lower()
     body = seen["json"]
     assert body["store"] is False
@@ -334,10 +351,7 @@ def test_plugin_reads_no_env_or_config_at_import(monkeypatch):
     the relay URL for the whole process (lesson from hutch-provider)."""
     monkeypatch.delenv("HUTCH_API_KEY", raising=False)
     monkeypatch.delenv("HUTCH_BASE_URL", raising=False)
-    sys.modules.pop("hutch_x_search_import_probe", None)
-    spec = importlib.util.spec_from_file_location("hutch_x_search_import_probe", PLUGIN_DIR / "__init__.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    mod = _load_plugin("hutch_grok_tools_import_probe")
     assert mod._check_hutch_x_search() is False
     monkeypatch.setenv("HUTCH_API_KEY", "k")
     monkeypatch.setenv("HUTCH_BASE_URL", "https://relay.test.example/v1")

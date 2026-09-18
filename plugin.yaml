@@ -1,12 +1,14 @@
-name: hutch-x-search
+name: hutch-grok-tools
 kind: standalone
-version: 1.0.1
-description: "Routes the built-in Hermes x_search tool through the Hutch relay (/responses + xAI x_search server tool) — same tool name, parameters and result shape; only the transport, the credential and the availability sentence of the description change."
+version: 1.1.0
+description: "Routes Hermes' Grok-backed tools through the Hutch relay: the built-in x_search (tool override, tools.override-gated) and a `hutch` web_search provider — same tool names, parameters and result shapes; only transport and credential change."
 author: Evgenii (smwbev)
-homepage: https://github.com/smwbev/hutch-x-search
+homepage: https://github.com/smwbev/hutch-grok-tools
 requires_hermes: ">=0.21.3"
 requires_env:
   - HUTCH_API_KEY
   - HUTCH_BASE_URL
 capabilities:
   - tools.override
+provides_web_providers:
+  - hutch

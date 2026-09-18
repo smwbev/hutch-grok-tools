@@ -1,0 +1,231 @@
+{
+ "created_at": 0,
+ "completed_at": 1789765741,
+ "id": "redacted",
+ "max_output_tokens": null,
+ "model": "grok-4.5-build",
+ "object": "response",
+ "output": [
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "type": "web_search_call",
+   "status": "completed",
+   "action": {
+    "type": "search",
+    "query": "Hermes Agent Nous Research",
+    "sources": [
+     {
+      "type": "url",
+      "url": "https://hermes-agent.org/about/"
+     },
+     {
+      "type": "url",
+      "url": "https://kie.ai/blog/what-is-hermes-agent"
+     },
+     {
+      "type": "url",
+      "url": "https://aiengineerinsights.com/blog/hermes-agent-nous-research-guide/"
+     },
+     {
+      "type": "url",
+      "url": "https://t.co/dLQex0WVkB"
+     },
+     {
+      "type": "url",
+      "url": "https://hermes-ai.net/news/"
+     },
+     {
+      "type": "url",
+      "url": "https://cryptobriefing.com/nous-research-grok-hermes-agent-integration/"
+     },
+     {
+      "type": "url",
+      "url": "https://github.com/NousResearch/hermes-agent/releases/latest"
+     },
+     {
+      "type": "url",
+      "url": "https://opper.ai/nous-research/hermes-4-405b"
+     },
+     {
+      "type": "url",
+      "url": "https://hermes-agent.nousresearch.com/docs/"
+     },
+     {
+      "type": "url",
+      "url": "https://lucaberton.com/blog/what-is-hermes-agent-nous-research/"
+     }
+    ]
+   }
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "id": "id_redacted",
+   "summary": [],
+   "type": "reasoning",
+   "status": "completed"
+  },
+  {
+   "content": [
+    {
+     "type": "output_text",
+     "text": "{\"results\":[{\"title\":\"Hermes Agent Documentation | Hermes Agent\",\"url\":\"https://hermes-agent.nousresearch.com/docs/\",\"description\":\"The self-improving AI agent built by Nous Research. The only agent with a built-in learning loop — it creates skills from experience, improves them during use, and builds a deepening model of who you are across sessions.\"},{\"title\":\"About Hermes Agent — Open-Source AI Agent by Nous Research\",\"url\":\"https://hermes-agent.org/about/\",\"description\":\"Hermes Agent is an open-source autonomous AI agent built by Nous Research and released in February 2026. It's not a coding copilot tethered to an IDE or a chatbot wrapper around a single API. Hermes lives on your server, remembers what it learns, and gets more capable the longer it runs.\"},{\"title\":\"What Is Hermes Agent? Nous Research's Learning-Loop Agent\",\"url\":\"https://kie.ai/blog/what-is-hermes-agent\",\"description\":\"Hermes Agent is Nous Research's open-source autonomous agent with a built-in learning loop, persistent memory, and 20+ platforms. MIT licensed, launched February 25, 2026.\"}]}",
+     "logprobs": [],
+     "annotations": [
+      {
+       "type": "url_citation",
+       "url": "https://hermes-agent.org/about/",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://hermes-agent.org/about/"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://kie.ai/blog/what-is-hermes-agent",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://kie.ai/blog/what-is-hermes-agent"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://aiengineerinsights.com/blog/hermes-agent-nous-research-guide/",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://aiengineerinsights.com/blog/hermes-agent-nous-research-guide/"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://t.co/dLQex0WVkB",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://t.co/dLQex0WVkB"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://hermes-ai.net/news/",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://hermes-ai.net/news/"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://cryptobriefing.com/nous-research-grok-hermes-agent-integration/",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://cryptobriefing.com/nous-research-grok-hermes-agent-integration/"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://github.com/NousResearch/hermes-agent/releases/latest",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://github.com/NousResearch/hermes-agent/releases/latest"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://opper.ai/nous-research/hermes-4-405b",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://opper.ai/nous-research/hermes-4-405b"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://hermes-agent.nousresearch.com/docs/",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://hermes-agent.nousresearch.com/docs/"
+      },
+      {
+       "type": "url_citation",
+       "url": "https://lucaberton.com/blog/what-is-hermes-agent-nous-research/",
+       "start_index": 0,
+       "end_index": 0,
+       "title": "https://lucaberton.com/blog/what-is-hermes-agent-nous-research/"
+      }
+     ]
+    }
+   ],
+   "id": "id_redacted",
+   "role": "assistant",
+   "type": "message",
+   "status": "completed"
+  }
+ ],
+ "parallel_tool_calls": true,
+ "previous_response_id": null,
+ "reasoning": {
+  "effort": null,
+  "summary": null
+ },
+ "temperature": 0.699999988079071,
+ "text": {
+  "format": {
+   "type": "text"
+  }
+ },
+ "tool_choice": "auto",
+ "tools": [
+  {
+   "type": "web_search"
+  },
+  {
+   "type": "x_search"
+  }
+ ],
+ "top_p": 0.949999988079071,
+ "usage": {
+  "input_tokens": 9967,
+  "input_tokens_details": {
+   "cached_tokens": 1792
+  },
+  "output_tokens": 923,
+  "output_tokens_details": {
+   "reasoning_tokens": 641
+  },
+  "total_tokens": 10890,
+  "num_sources_used": 0,
+  "num_server_side_tools_used": 1,
+  "cost_in_usd_ticks": 126247040,
+  "server_side_tool_usage_details": {
+   "web_search_calls": 1,
+   "x_search_calls": 0,
+   "code_interpreter_calls": 0,
+   "file_search_calls": 0,
+   "mcp_calls": 0,
+   "document_search_calls": 0,
+   "image_generation_calls": 0
+  },
+  "context_details": {
+   "input_tokens": 7788,
+   "output_tokens": 845
+  }
+ },
+ "user": null,
+ "incomplete_details": null,
+ "status": "completed",
+ "store": false,
+ "metadata": {
+  "system_fingerprint": "fp_a685565a45638e34"
+ },
+ "background": false,
+ "service_tier": "default",
+ "truncation": "disabled",
+ "top_logprobs": 0,
+ "presence_penalty": 0.0,
+ "frequency_penalty": 0.0,
+ "prompt_cache_key": "redacted",
+ "max_tool_calls": null,
+ "safety_identifier": null,
+ "error": null,
+ "instructions": ""
+}

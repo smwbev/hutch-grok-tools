@@ -1,4 +1,13 @@
-"""hutch-x-search — the built-in Hermes ``x_search`` tool, transported through the Hutch relay.
+"""hutch-grok-tools — Hermes' Grok-backed tools, transported through the Hutch relay.
+
+Two integrations in one plugin:
+
+* ``x_search`` — an OVERRIDE of the built-in tool (operator-gated, see below). Hermes has no
+  provider abstraction for x_search, so replacing the tool is the only way to change its
+  transport.
+* ``web_search`` — a regular web-search PROVIDER named ``hutch`` (``web_provider.py``),
+  registered through ``ctx.register_web_search_provider`` and selected with
+  ``web.search_backend: hutch``. No override involved; independent of the x_search grant.
 
 Hermes ships ``x_search`` (``tools/x_search_tool.py``) wired to xAI's Responses API and
 credentialed exclusively from ``xai-oauth`` or ``XAI_API_KEY``; ``XAI_BASE_URL`` is
@@ -32,9 +41,10 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-PLUGIN_ID = "hutch-x-search"
-PLUGIN_VERSION = "1.0.1"
+PLUGIN_ID = "hutch-grok-tools"
+PLUGIN_VERSION = "1.1.0"
 PROVIDER = "hutch"
+_USER_AGENT = f"{PLUGIN_ID}/{PLUGIN_VERSION}"
 
 # The one sentence of the core tool description that is false through the relay: the model
 # reads the description to decide what to tell the user when the tool is missing or fails, and
@@ -46,14 +56,14 @@ _HUTCH_AVAILABILITY_SENTENCE = (
 )
 
 _OVERRIDE_HELP = (
-    "hutch-x-search: overriding the built-in x_search tool is not permitted for this plugin. "
+    f"{PLUGIN_ID}: overriding the built-in x_search tool is not permitted for this plugin. "
     "Grant it in config.yaml —\n"
     "    plugins:\n"
     "      entries:\n"
     f"        {PLUGIN_ID}:\n"
     "          allow_tool_override: true\n"
-    "— or re-run `hermes plugins enable hutch-x-search` and accept the tools.override prompt. "
-    "Until then the stock xAI-credentialed x_search stays in place."
+    f"— or re-run `hermes plugins enable {PLUGIN_ID}` and accept the tools.override prompt. "
+    "Until then the stock xAI-credentialed x_search stays in place (web_search via hutch is unaffected)."
 )
 
 
@@ -88,7 +98,7 @@ def _headers() -> Dict[str, str]:
     return {
         "Authorization": f"Bearer {_api_key()}",
         "Content-Type": "application/json",
-        "User-Agent": f"hutch-x-search/{PLUGIN_VERSION}",
+        "User-Agent": _USER_AGENT,
     }
 
 
@@ -116,7 +126,7 @@ def _core():
     missing = [n for n in _CORE_SEAMS if not hasattr(core, n)]
     if missing:
         raise RuntimeError(
-            f"tools.x_search_tool lacks {', '.join(missing)} — hutch-x-search needs Hermes >= 0.21.3"
+            f"tools.x_search_tool lacks {', '.join(missing)} — {PLUGIN_ID} needs Hermes >= 0.21.3"
         )
     return core
 
@@ -163,7 +173,7 @@ def hutch_x_search_tool(
         return _tool_error("query is required for x_search")
     api_key, base_url = _api_key(), _base_url()
     if not api_key or not base_url:
-        return _tool_error("hutch-x-search: HUTCH_API_KEY / HUTCH_BASE_URL are not set")
+        return _tool_error(f"{PLUGIN_ID}: HUTCH_API_KEY / HUTCH_BASE_URL are not set")
 
     try:
         core = _core()
@@ -265,14 +275,13 @@ def _hutch_schema(core_schema: Dict[str, Any]) -> Dict[str, Any]:
     return {**core_schema, "description": desc}
 
 
-def register(ctx: Any) -> None:
+def _register_x_search_override(ctx: Any) -> None:
     try:
         core = _core()
         schema = _hutch_schema(core.X_SEARCH_SCHEMA)
     except Exception as exc:
-        logger.warning("hutch-x-search: core x_search tool not importable (%s); nothing registered", exc)
+        logger.warning("%s: core x_search tool not importable (%s); x_search override skipped", PLUGIN_ID, exc)
         return
-
     try:
         ctx.register_tool(
             name="x_search",
@@ -292,4 +301,22 @@ def register(ctx: Any) -> None:
         # "plugin module active in multiple profiles" — the snippet alone would mislead there.
         logger.warning("%s\n(core said: %s)", _OVERRIDE_HELP, exc)
         return
-    logger.info("hutch-x-search: x_search now routes through the Hutch relay")
+    logger.info("%s: x_search now routes through the Hutch relay", PLUGIN_ID)
+
+
+def _register_web_search_provider(ctx: Any) -> None:
+    # Own try/except: if this half fails on some future core, the loader would otherwise roll
+    # back the whole register() — including an x_search override that already succeeded.
+    try:
+        from .web_provider import HutchWebSearchProvider
+        ctx.register_web_search_provider(HutchWebSearchProvider(_api_key, _base_url, _USER_AGENT))
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("%s: web search provider not registered (%s); x_search is unaffected", PLUGIN_ID, exc)
+        return
+    logger.info("%s: web search provider 'hutch' registered (select with web.search_backend: hutch)", PLUGIN_ID)
+
+
+def register(ctx: Any) -> None:
+    # Independent: a denied x_search override must not cost the user web_search, and vice versa.
+    _register_x_search_override(ctx)
+    _register_web_search_provider(ctx)
